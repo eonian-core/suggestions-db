@@ -1,0 +1,23 @@
+name: Daily Heartbeat
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # This runs the action every day at midnight UTC
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Bash script
+        env:
+          HEARTBEAT_URL: ${{ vars.HEARTBEAT_URL }}
+          HEARTBEAT_API_KEY: ${{ secrets.HEARTBEAT_API_KEY }}
+        run: |
+          curl -X POST "$HEARTBEAT_URL" \
+            -H "apikey: $HEARTBEAT_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{"timestamp": "now()"}'
