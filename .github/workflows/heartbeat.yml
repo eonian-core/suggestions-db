@@ -1,17 +1,15 @@
 name: Daily Heartbeat
-
 on:
   schedule:
     - cron: '0 0 * * *'  # This runs the action every day at midnight UTC
-
 jobs:
   ping:
     runs-on: ubuntu-latest
-
+    environment:
+      name: Production
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Run Bash script
         env:
           HEARTBEAT_URL: ${{ vars.HEARTBEAT_URL }}
